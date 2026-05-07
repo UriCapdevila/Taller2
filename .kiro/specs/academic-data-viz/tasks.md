@@ -153,65 +153,65 @@ Implementación en tres capas desacopladas: (1) Data Pipeline en Python/Colab qu
   - Crear `index.html` con el div raíz y el script de entrada de Vite
   - _Requirements: 3.1, 3.2, 3.3, 3.7_
 
-- [~] 7. Checkpoint — Frontend completo
+- [ ] 7. Checkpoint — Frontend completo
   - Asegurar que todos los tests del frontend pasan. Consultar al usuario si surgen dudas.
 
-- [~] 8. Implementar el Data Pipeline en Python (Colab Notebook)
-  - [~] 8.1 Crear `pipeline/pipeline.ipynb` con celda de autenticación
+- [ ] 8. Implementar el Data Pipeline en Python (Colab Notebook)
+  - [ ] 8.1 Crear `pipeline/pipeline.ipynb` con celda de autenticación
     - Cargar credenciales de Service Account desde `google.colab.userdata` (nunca en texto plano)
     - Construir cliente autenticado con `google-api-python-client` y `google-auth`
     - Capturar excepciones de autenticación, imprimir mensaje descriptivo y llamar `sys.exit(1)`
     - _Requirements: 1.1, 1.5, 5.3_
 
-  - [~] 8.2 Implementar generación de gráficos y construcción del artefacto JSON
+  - [ ] 8.2 Implementar generación de gráficos y construcción del artefacto JSON
     - Procesar el dataset con `pandas`
     - Generar gráficos con `matplotlib` o `plotly` y exportarlos como Base64 (sin prefijo `data:`)
     - Construir el dict del artefacto con campos `dataset_id`, `title`, `generated_at`, `notes`, `charts`
     - Capturar excepciones de generación de gráficos y registrar el chart fallido
     - _Requirements: 1.2, 1.7_
 
-  - [~] 8.3 Escribir property test para campos requeridos del artefacto (Property 1)
+  - [ ] 8.3 Escribir property test para campos requeridos del artefacto (Property 1)
     - **Property 1: El artefacto generado contiene todos los campos requeridos**
     - Usar `Hypothesis` para generar datasets con distintos contenidos, tamaños y tipos de datos
     - Verificar que el artefacto resultante contiene `dataset_id`, `title`, `generated_at`, `notes`, `charts`
     - Incluir comentario: `# Feature: academic-data-viz, Property 1`
     - **Validates: Requirements 1.2**
 
-  - [~] 8.4 Escribir property test para validez de Base64 en charts (Property 2)
+  - [ ] 8.4 Escribir property test para validez de Base64 en charts (Property 2)
     - **Property 2: Los charts se exportan como Base64 válido**
     - Usar `Hypothesis` para generar gráficos con distintos datos
     - Verificar que el campo `data` de cada chart se puede decodificar con `base64.b64decode` sin error
     - Incluir comentario: `# Feature: academic-data-viz, Property 2`
     - **Validates: Requirements 1.7**
 
-  - [~] 8.5 Implementar subida/sobrescritura del artefacto a Google Drive
+  - [ ] 8.5 Implementar subida/sobrescritura del artefacto a Google Drive
     - Buscar archivo `artifact_{id}.json` en `GOOGLE_DRIVE_FOLDER_ID`
     - Si existe → actualizar (sobrescribir) usando `files().update()`
     - Si no existe → crear usando `files().create()`
     - Capturar excepciones de subida, imprimir código de error de Drive API y llamar `sys.exit(1)`
     - _Requirements: 1.3, 1.4, 1.6_
 
-  - [~] 8.6 Escribir property test para idempotencia de subida (Property 3)
+  - [ ] 8.6 Escribir property test para idempotencia de subida (Property 3)
     - **Property 3: La subida es idempotente — no genera duplicados**
     - Usar `Hypothesis` para generar artefactos con/sin archivo previo en Drive (mock de Drive API)
     - Verificar que tras la ejecución existe exactamente un archivo `artifact_{id}.json` en la carpeta
     - Incluir comentario: `# Feature: academic-data-viz, Property 3`
     - **Validates: Requirements 1.4**
 
-  - [~] 8.7 Escribir tests unitarios para el Data Pipeline
+  - [ ] 8.7 Escribir tests unitarios para el Data Pipeline
     - Fallo de autenticación → excepción con mensaje descriptivo
     - Fallo de upload → excepción con código de error de Drive API
     - Dataset vacío → error antes de generar artefacto
     - _Requirements: 1.5, 1.6_
 
-- [~] 9. Crear documentación de configuración y variables de entorno
+- [ ] 9. Crear documentación de configuración y variables de entorno
   - Crear `README.md` en la raíz del proyecto con instrucciones de despliegue en Netlify
   - Documentar las Environment_Variables requeridas: `GOOGLE_SERVICE_ACCOUNT_JSON` y `GOOGLE_DRIVE_FOLDER_ID`
   - Incluir instrucciones para configurar la Service Account en Google Colab usando `google.colab.userdata`
   - Verificar que el README solo referencia nombres de variables, sin valores de credenciales
   - _Requirements: 2.10, 5.4_
 
-- [~] 10. Checkpoint final — Integración y verificación
+- [ ] 10. Checkpoint final — Integración y verificación
   - Asegurar que todos los tests (pipeline, función, frontend) pasan.
   - Verificar que no hay credenciales en ningún archivo del repositorio.
   - Verificar que los elementos `<img>` tienen `max-width: 100%`.

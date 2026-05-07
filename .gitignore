@@ -3,3 +3,6 @@ dist/
 .env
 *credentials*.json
 *service-account*.json
+
+# Local Netlify folder
+.netlify
