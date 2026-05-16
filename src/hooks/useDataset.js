@@ -25,7 +25,7 @@ export function useDataset(id, cache, setCache) {
       setError(null);
 
       try {
-        const response = await fetch('/.netlify/functions/get-dataset?id=' + id);
+        const response = await fetch(`/datasets/artifact_${id}.json`);
 
         if (!response.ok) {
           if (!ignore) {

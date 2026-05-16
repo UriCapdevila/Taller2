@@ -28,10 +28,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import seaborn as sns
 
-from google.colab import userdata
-from googleapiclient.discovery import build
-from googleapiclient.http import MediaIoBaseUpload
-from google.oauth2 import service_account
+import os
 
 print('Imports OK')
 
@@ -39,29 +36,16 @@ print('Imports OK')
 DATASET_ID        = 1
 DATASET_TITLE     = 'Patient Segmentation Dataset'
 ARTIFACT_FILENAME = f'artifact_{DATASET_ID}.json'
-DATASET_PATH      = '/content/patient_segmentation_dataset.csv'
-DRIVE_SCOPES      = ['https://www.googleapis.com/auth/drive']
+
+# Resolving paths relative to the script location
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATASET_PATH = os.path.join(BASE_DIR, '..', 'data', 'raw', 'patient_segmentation_dataset.csv')
+OUTPUT_DIR = os.path.join(BASE_DIR, '..', 'public', 'datasets')
+
 print(f'Artefacto destino: {ARTIFACT_FILENAME}')
 
 # %% — Celda 4: Autenticación con Google Drive
-def build_drive_service():
-    try:
-        sa_json = userdata.get('GOOGLE_SERVICE_ACCOUNT_JSON')
-    except Exception as e:
-        print(f'[ERROR] No se pudo leer GOOGLE_SERVICE_ACCOUNT_JSON desde Secrets: {e}')
-        sys.exit(1)
-    try:
-        sa_info = json.loads(sa_json)
-        creds   = service_account.Credentials.from_service_account_info(
-                      sa_info, scopes=DRIVE_SCOPES)
-        svc     = build('drive', 'v3', credentials=creds)
-        print('[OK] Autenticación con Google Drive exitosa.')
-        return svc
-    except Exception as e:
-        print(f'[ERROR] Fallo al construir cliente Drive: {e}')
-        sys.exit(1)
-
-drive_service = build_drive_service()
+# (Removido por migración a almacenamiento local)
 
 # %% — Celda 5: Carga y validación del dataset
 try:
@@ -450,45 +434,15 @@ print(f'[INFO] Artefacto construido.')
 print(f'       Charts incluidos : {len(charts)}')
 print(f'       Tamaño estimado  : {len(artifact_bytes) / 1024:.1f} KB')
 
-# %% — Celda 14: Subida / sobrescritura en Google Drive
-def get_folder_id() -> str:
-    try:
-        folder_id = userdata.get('GOOGLE_DRIVE_FOLDER_ID')
-        if not folder_id:
-            raise ValueError('GOOGLE_DRIVE_FOLDER_ID está vacío.')
-        return folder_id
-    except Exception as e:
-        print(f'[ERROR] No se pudo leer GOOGLE_DRIVE_FOLDER_ID desde Secrets: {e}')
-        sys.exit(1)
+# %% — Celda 14: Guardado local en public/datasets/
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+output_path = os.path.join(OUTPUT_DIR, ARTIFACT_FILENAME)
 
-def upload_artifact(service, folder_id: str, filename: str, content: bytes):
-    """Sube o sobrescribe el artefacto JSON en Google Drive (sin duplicados)."""
-    media = MediaIoBaseUpload(io.BytesIO(content), mimetype='application/json', resumable=False)
-
-    # Buscar archivo existente con el mismo nombre en la carpeta
-    try:
-        query   = f"name='{filename}' and '{folder_id}' in parents and trashed=false"
-        results = service.files().list(q=query, fields='files(id, name)', spaces='drive').execute()
-        existing = results.get('files', [])
-    except Exception as e:
-        print(f'[ERROR] Fallo al buscar archivo en Drive: {e}')
-        sys.exit(1)
-
-    try:
-        if existing:
-            file_id = existing[0]['id']
-            service.files().update(fileId=file_id, media_body=media).execute()
-            print(f'[OK] Artefacto actualizado (sobrescrito): {filename}  (id={file_id})')
-        else:
-            file_metadata = {'name': filename, 'parents': [folder_id], 'mimeType': 'application/json'}
-            created = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-            print(f'[OK] Artefacto creado: {filename}  (id={created["id"]})')
-    except Exception as e:
-        print(f'[ERROR] Fallo al subir el artefacto a Drive: {e}')
-        sys.exit(1)
-
-folder_id = get_folder_id()
-upload_artifact(drive_service, folder_id, ARTIFACT_FILENAME, artifact_bytes)
-print('\n✅ Pipeline completado exitosamente.')
-print(f'   Archivo en Drive: {ARTIFACT_FILENAME}')
-print(f'   Carpeta ID      : {folder_id}')
+try:
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(json.dumps(artifact, ensure_ascii=False))
+    print(f'\n✅ Pipeline completado exitosamente.')
+    print(f'   Archivo guardado en: {output_path}')
+except Exception as e:
+    print(f'[ERROR] Fallo al guardar el artefacto localmente: {e}')
+    sys.exit(1)
