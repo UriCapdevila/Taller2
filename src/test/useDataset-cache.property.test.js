@@ -23,7 +23,7 @@ describe('Property 8: El fetch se realiza exactamente una vez por tab por sesió
   beforeEach(() => {
     // Mock global fetch to return a valid artifact for any id
     global.fetch = vi.fn().mockImplementation((url) => {
-      const id = parseInt(new URL(url, 'http://localhost').searchParams.get('id'));
+      const id = parseInt(url.match(/artifact_(\d+)\.json/)[1], 10);
       return Promise.resolve({
         ok: true,
         json: () =>
@@ -71,7 +71,7 @@ describe('Property 8: El fetch se realiza exactamente una vez por tab por sesió
           const callsPerId = new Map();
           for (const call of global.fetch.mock.calls) {
             const url = call[0];
-            const id = parseInt(new URL(url, 'http://localhost').searchParams.get('id'));
+            const id = parseInt(url.match(/artifact_(\d+)\.json/)[1], 10);
             callsPerId.set(id, (callsPerId.get(id) ?? 0) + 1);
           }
 
