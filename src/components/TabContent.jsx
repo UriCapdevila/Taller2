@@ -1,50 +1,32 @@
-/**
- * TabContent — renders the content area for the active tab.
- *
- * Priority order: loading > error > data > (empty/initial state)
- *
- * Props:
- *   data    {ArtifactJSON | null} — the fetched artifact, or null
- *   loading {boolean}            — true while a fetch is in progress
- *   error   {string | null}      — error message, or null
- *
- * Requirements: 3.4, 3.5, 3.6
- */
-import LoadingSpinner from './LoadingSpinner';
-import ErrorMessage from './ErrorMessage';
 import ChartDisplay from './ChartDisplay';
 import NotesDisplay from './NotesDisplay';
 
-const containerStyle = {
-  padding: '1rem',
-};
-
 export default function TabContent({ data, loading, error }) {
   if (loading) {
-    return (
-      <div style={containerStyle}>
-        <LoadingSpinner />
-      </div>
-    );
+    return <div style={{ padding: '3rem', textAlign: 'center', color: '#64748b' }}>Cargando datos...</div>;
   }
-
+  
   if (error) {
-    return (
-      <div style={containerStyle}>
-        <ErrorMessage message={error} />
-      </div>
-    );
+    // We throw the error so that the ErrorBoundary in App.jsx catches it
+    throw new Error(error);
   }
+  
+  if (!data) return null;
 
-  if (data) {
-    return (
-      <div style={containerStyle}>
-        <ChartDisplay charts={data.charts} />
-        <NotesDisplay notes={data.notes} />
+  return (
+    <div style={{ 
+      display: 'grid', 
+      gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', 
+      gap: '2.5rem',
+      padding: '2rem',
+      alignItems: 'start'
+    }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <ChartDisplay chartPath={data.chartPath} codeSnippet={data.codeSnippet} />
       </div>
-    );
-  }
-
-  // Initial state — no fetch has been triggered yet
-  return null;
+      <div style={{ height: '100%', maxHeight: '600px' }}>
+        <NotesDisplay notes={data.markdownText} />
+      </div>
+    </div>
+  );
 }

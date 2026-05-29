@@ -1,32 +1,8 @@
 import { DATASETS } from '../constants.js';
 
-const activeStyle = {
-  backgroundColor: '#1a73e8',
-  color: '#ffffff',
-  border: '2px solid #1a73e8',
-  fontWeight: 'bold',
-};
-
-const inactiveStyle = {
-  backgroundColor: '#f1f3f4',
-  color: '#3c4043',
-  border: '2px solid #dadce0',
-  fontWeight: 'normal',
-};
-
-const baseStyle = {
-  padding: '10px 20px',
-  cursor: 'pointer',
-  borderRadius: '4px 4px 0 0',
-  fontSize: '14px',
-  marginRight: '4px',
-  transition: 'background-color 0.2s, color 0.2s',
-  outline: 'none',
-};
-
 export default function TabBar({ activeTab, onTabChange }) {
   return (
-    <nav role="tablist" aria-label="Dataset tabs" style={{ display: 'flex', borderBottom: '2px solid #dadce0', paddingBottom: '0' }}>
+    <nav role="tablist" aria-label="Dataset tabs" style={{ display: 'flex', borderBottom: '1px solid #e2e8f0', backgroundColor: '#f8fafc', padding: '0 1.5rem', paddingTop: '1.5rem', gap: '1rem', overflowX: 'auto' }}>
       {DATASETS.map((dataset) => {
         const isActive = dataset.id === activeTab;
         return (
@@ -34,14 +10,24 @@ export default function TabBar({ activeTab, onTabChange }) {
             key={dataset.id}
             role="tab"
             aria-selected={isActive}
-            aria-controls={`tabpanel-${dataset.id}`}
-            id={`tab-${dataset.id}`}
             onClick={() => onTabChange(dataset.id)}
             style={{
-              ...baseStyle,
-              ...(isActive ? activeStyle : inactiveStyle),
-              marginBottom: isActive ? '-2px' : '0',
+              padding: '0.75rem 1.5rem',
+              cursor: 'pointer',
+              borderRadius: '8px 8px 0 0',
+              fontSize: '0.95rem',
+              fontWeight: isActive ? '600' : '500',
+              transition: 'all 0.2s ease-in-out',
+              outline: 'none',
+              border: 'none',
+              borderBottom: isActive ? '3px solid #3b82f6' : '3px solid transparent',
+              backgroundColor: isActive ? '#ffffff' : 'transparent',
+              color: isActive ? '#0f172a' : '#64748b',
+              marginBottom: '-1px',
+              whiteSpace: 'nowrap'
             }}
+            onMouseOver={(e) => { if (!isActive) e.currentTarget.style.color = '#334155' }}
+            onMouseOut={(e) => { if (!isActive) e.currentTarget.style.color = '#64748b' }}
           >
             {dataset.name}
           </button>
