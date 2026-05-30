@@ -1,9 +1,9 @@
-import { DATASETS } from '../constants.js';
+import { localDatasets } from '../data/datasets.js';
 
 export default function TabBar({ activeTab, onTabChange }) {
   return (
     <nav role="tablist" aria-label="Dataset tabs" style={{ display: 'flex', borderBottom: '1px solid #e2e8f0', backgroundColor: '#f8fafc', padding: '0 1.5rem', paddingTop: '1.5rem', gap: '1rem', overflowX: 'auto' }}>
-      {DATASETS.map((dataset) => {
+      {localDatasets.map((dataset) => {
         const isActive = dataset.id === activeTab;
         return (
           <button
@@ -29,7 +29,7 @@ export default function TabBar({ activeTab, onTabChange }) {
             onMouseOver={(e) => { if (!isActive) e.currentTarget.style.color = '#334155' }}
             onMouseOut={(e) => { if (!isActive) e.currentTarget.style.color = '#64748b' }}
           >
-            {dataset.name}
+            {dataset.title}
           </button>
         );
       })}
