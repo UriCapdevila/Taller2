@@ -26,7 +26,7 @@ export default function App() {
     <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', display: 'flex', flexDirection: 'column', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       <header style={{ backgroundColor: '#ffffff', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}>
         <h1 style={{ margin: 0, fontSize: '1.8rem', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.025em' }}>
-          Data Analyzer <span style={{ color: '#3b82f6' }}>Pro</span>
+          Taller II <span style={{ color: '#3b82f6' }}>Big Data y la Salud</span>
         </h1>
         <p style={{ margin: 0, marginTop: '0.5rem', color: '#64748b', fontSize: '1rem' }}>
           Visualización estática e interactiva de resultados de investigación.
