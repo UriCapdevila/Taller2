@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build:data": "python pipeline/ntrarogyaseva_base_taller_.py",
     "dev": "vite",
     "dev:vite": "vite",
     "build": "vite build",

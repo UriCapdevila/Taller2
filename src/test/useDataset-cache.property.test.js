@@ -42,9 +42,11 @@ describe('Property 8: El fetch se realiza exactamente una vez por tab por sesió
     vi.restoreAllMocks();
   });
 
-  it('fetches each tab id exactly once for any navigation sequence', async () => {
-    await fc.assert(
-      fc.asyncProperty(
+  it(
+    'fetches each tab id exactly once for any navigation sequence',
+    async () => {
+      await fc.assert(
+        fc.asyncProperty(
         // Generate a non-empty sequence of tab ids (1–4) with possible repetitions
         fc.array(fc.integer({ min: 1, max: 4 }), { minLength: 1, maxLength: 10 }),
         async (sequence) => {
@@ -63,8 +65,9 @@ describe('Property 8: El fetch se realiza exactamente una vez por tab por sesió
               result.current.navigate(sequence[i]);
             });
 
-            // Give React time to settle after each navigation
-            await act(async () => {});
+            await waitFor(() => {
+              expect(result.current.loading).toBe(false);
+            });
           }
 
           // Count fetch calls per id
@@ -84,7 +87,9 @@ describe('Property 8: El fetch se realiza exactamente una vez por tab por sesió
           unmount();
         },
       ),
-      { numRuns: 100 },
-    );
-  });
+        { numRuns: 100 },
+      );
+    },
+    60_000,
+  );
 });

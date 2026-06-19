@@ -1,29 +1,77 @@
-export default function ChartDisplay({ chartPath, codeSnippet }) {
+import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { repairMojibake } from '../utils/text.js';
+
+function buildChartSrc(chart, chartData) {
+  if (chart?.type && chart?.data) {
+    return `data:${chart.type};base64,${chart.data}`;
+  }
+
+  return chartData ?? '';
+}
+
+export default function ChartDisplay(props) {
+  const { chart, chartData, codeSnippet, title } = props;
+  const [imageFailed, setImageFailed] = useState(false);
+
+  if (Object.prototype.hasOwnProperty.call(props, 'charts')) {
+    const charts = props.charts ?? [];
+
+    if (charts.length === 0) {
+      return (
+        <div className="chart-card">
+          <div className="chart-frame">
+            <p className="empty-state">
+              {'No hay gr\u00e1ficos disponibles para este dataset.'}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="charts-grid">
+        {charts.map((item) => (
+          <ChartDisplay key={item.id} chart={item} />
+        ))}
+      </div>
+    );
+  }
+
+  const chartTitle = repairMojibake(chart?.title ?? title ?? 'Gr\u00e1fico del dataset');
+  const description = repairMojibake(chart?.description ?? '');
+  const source = buildChartSrc(chart, chartData);
+  const snippet = chart?.codeSnippet ?? codeSnippet;
+  const hasImage = source && !imageFailed;
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', height: '100%' }}>
-      <div style={{ flex: 1, backgroundColor: '#f1f5f9', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: '1px solid #e2e8f0', minHeight: '350px' }}>
-        {chartPath ? (
-          <img 
-            src={chartPath} 
-            alt="Dataset Chart" 
-            style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain' }}
-            onError={(e) => { e.target.src = 'https://via.placeholder.com/600x400?text=Gr%C3%A1fico+No+Encontrado' }}
-          />
+    <article className="chart-card">
+      <div className="chart-card__header">
+        <h3 className="chart-card__title">{chartTitle}</h3>
+      </div>
+
+      <div className="chart-frame">
+        {hasImage ? (
+          <img src={source} alt={chartTitle} onError={() => setImageFailed(true)} />
         ) : (
-          <p style={{ color: '#64748b' }}>Gráfico no disponible</p>
+          <p className="empty-state">{'Gr\u00e1fico no disponible.'}</p>
         )}
       </div>
-      
-      {codeSnippet && (
-        <div style={{ backgroundColor: '#1e293b', borderRadius: '8px', padding: '1rem', overflowX: 'auto', boxShadow: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)' }}>
-          <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 'bold' }}>
-            Código Fuente
-          </div>
-          <pre style={{ margin: 0, color: '#f8fafc', fontSize: '0.9rem', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}>
-            <code>{codeSnippet}</code>
-          </pre>
+
+      {description.trim() && (
+        <div className="chart-description">
+          <ReactMarkdown>{description}</ReactMarkdown>
         </div>
       )}
-    </div>
+
+      {snippet && (
+        <details className="code-details">
+          <summary>{'C\u00f3digo fuente'}</summary>
+          <pre>
+            <code>{snippet}</code>
+          </pre>
+        </details>
+      )}
+    </article>
   );
 }
