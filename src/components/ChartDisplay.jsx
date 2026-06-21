@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import StoryPage from './StoryPage.jsx';
 import { repairMojibake } from '../utils/text.js';
 
 function buildChartSrc(chart, chartData) {
@@ -10,8 +11,31 @@ function buildChartSrc(chart, chartData) {
   return chartData ?? '';
 }
 
+function cleanChartTitle(value) {
+  return repairMojibake(value).replace(/^Gr\u00e1fico\s+\d+\s*:\s*/i, '');
+}
+
+function splitInsight(value) {
+  const text = value.trim();
+  const sentenceEnd = /\.\s+/g;
+  let match = sentenceEnd.exec(text);
+
+  while (match && match.index < 70) {
+    match = sentenceEnd.exec(text);
+  }
+
+  if (!match) {
+    return { lead: text, detail: '' };
+  }
+
+  return {
+    lead: text.slice(0, match.index + 1),
+    detail: text.slice(match.index + match[0].length),
+  };
+}
+
 export default function ChartDisplay(props) {
-  const { chart, chartData, codeSnippet, title } = props;
+  const { chart, chartData, codeSnippet, title, index = 0, total = 1 } = props;
   const [imageFailed, setImageFailed] = useState(false);
 
   if (Object.prototype.hasOwnProperty.call(props, 'charts')) {
@@ -38,40 +62,54 @@ export default function ChartDisplay(props) {
     );
   }
 
-  const chartTitle = repairMojibake(chart?.title ?? title ?? 'Gr\u00e1fico del dataset');
+  const chartTitle = cleanChartTitle(chart?.title ?? title ?? 'Gr\u00e1fico del dataset');
   const description = repairMojibake(chart?.description ?? '');
+  const insight = splitInsight(description);
   const source = buildChartSrc(chart, chartData);
   const snippet = chart?.codeSnippet ?? codeSnippet;
   const hasImage = source && !imageFailed;
 
   return (
-    <article className="chart-card">
-      <div className="chart-card__header">
-        <h3 className="chart-card__title">{chartTitle}</h3>
-      </div>
-
-      <div className="chart-frame">
+    <StoryPage
+      id={`story-chart-${index + 1}`}
+      className={`chart-story ${index % 2 === 1 ? 'chart-story--reverse' : ''}`}
+      label={`${chartTitle}. Visualizacion ${index + 1} de ${total}`}
+    >
+      <div className="chart-visual story-reveal story-reveal--visual">
         {hasImage ? (
-          <img src={source} alt={chartTitle} onError={() => setImageFailed(true)} />
+          <img
+            src={source}
+            alt={chartTitle}
+            loading={index > 0 ? 'lazy' : 'eager'}
+            decoding="async"
+            onError={() => setImageFailed(true)}
+          />
         ) : (
           <p className="empty-state">{'Gr\u00e1fico no disponible.'}</p>
         )}
       </div>
 
-      {description.trim() && (
-        <div className="chart-description">
-          <ReactMarkdown>{description}</ReactMarkdown>
-        </div>
-      )}
+      <div className="story-copy story-reveal story-reveal--copy">
+        <p className="story-chapter">
+          {String(index + 2).padStart(2, '0')} · Visualización {index + 1} de {total}
+        </p>
+        <h2>{chartTitle}</h2>
 
-      {snippet && (
-        <details className="code-details">
-          <summary>{'C\u00f3digo fuente'}</summary>
-          <pre>
-            <code>{snippet}</code>
-          </pre>
-        </details>
-      )}
-    </article>
+        {insight.lead && <p className="story-lead">{insight.lead}</p>}
+
+        {insight.detail && (
+          <div className="story-detail">
+            <ReactMarkdown>{insight.detail}</ReactMarkdown>
+          </div>
+        )}
+
+        {snippet && (
+          <details className="code-details">
+            <summary>{'Ver código fuente'}</summary>
+            <pre><code>{snippet}</code></pre>
+          </details>
+        )}
+      </div>
+    </StoryPage>
   );
 }

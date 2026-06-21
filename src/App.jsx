@@ -30,33 +30,25 @@ export default function App() {
     <div className="app-shell">
       <header className="app-header">
         <div className="app-header__inner">
-          <div>
-            <p className="app-eyebrow">Taller II</p>
-            <h1 className="app-title">
-              Big Data <span>y Salud</span>
-            </h1>
-            <p className="app-subtitle">
-              {'Visualizaci\u00f3n est\u00e1tica e interactiva de resultados de investigaci\u00f3n, con foco en claridad, lectura r\u00e1pida y trazabilidad del an\u00e1lisis.'}
-            </p>
-          </div>
+          <a className="app-brand" href="#story-start" aria-label="Ir al inicio">
+            <span className="app-brand__course">Taller II</span>
+            <span className="app-brand__title">Big Data <strong>y Salud</strong></span>
+          </a>
+          <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
         </div>
       </header>
 
       <main className="app-main">
-        <div className="dashboard-shell">
-          <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
-
-          <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => setActiveTab(initialDatasetId)}>
-            <section
-              id={`panel-${activeTab}`}
-              className="tab-panel"
-              role="tabpanel"
-              aria-labelledby={`tab-${activeTab}`}
-            >
-              <TabContent data={data} loading={loading} error={error} />
-            </section>
-          </ErrorBoundary>
-        </div>
+        <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => setActiveTab(initialDatasetId)}>
+          <div
+            id={`panel-${activeTab}`}
+            className="tab-panel"
+            role="tabpanel"
+            aria-labelledby={`tab-${activeTab}`}
+          >
+            <TabContent data={data} loading={loading} error={error} />
+          </div>
+        </ErrorBoundary>
       </main>
     </div>
   );
