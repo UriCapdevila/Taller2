@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import StoryPage from './StoryPage.jsx';
 import { repairMojibake } from '../utils/text.js';
+import { getStoryTitleClass } from '../utils/storyLayout.js';
 
 function buildChartSrc(chart, chartData) {
   if (chart?.type && chart?.data) {
@@ -63,6 +64,7 @@ export default function ChartDisplay(props) {
   }
 
   const chartTitle = cleanChartTitle(chart?.title ?? title ?? 'Gr\u00e1fico del dataset');
+  const titleClass = getStoryTitleClass(chartTitle);
   const description = repairMojibake(chart?.description ?? '');
   const insight = splitInsight(description);
   const source = buildChartSrc(chart, chartData);
@@ -72,7 +74,7 @@ export default function ChartDisplay(props) {
   return (
     <StoryPage
       id={`story-chart-${index + 1}`}
-      className={`chart-story ${index % 2 === 1 ? 'chart-story--reverse' : ''}`}
+      className={`chart-story ${index % 2 === 1 ? 'chart-story--reverse' : ''} ${titleClass ? 'story-page--dense' : ''}`}
       label={`${chartTitle}. Visualizacion ${index + 1} de ${total}`}
     >
       <div className="chart-visual story-reveal story-reveal--visual">
@@ -93,7 +95,7 @@ export default function ChartDisplay(props) {
         <p className="story-chapter">
           {String(index + 2).padStart(2, '0')} · Visualización {index + 1} de {total}
         </p>
-        <h2>{chartTitle}</h2>
+        <h2 className={`story-title ${titleClass}`.trim()}>{chartTitle}</h2>
 
         {insight.lead && <p className="story-lead">{insight.lead}</p>}
 

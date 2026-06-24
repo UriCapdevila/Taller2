@@ -4,16 +4,16 @@ import * as fc from 'fast-check';
 import { useState } from 'react';
 import TabBar from '../components/TabBar.jsx';
 import TabContent from '../components/TabContent.jsx';
-import { availableDatasets } from '../data/datasets.js';
+import { availableViews } from '../data/datasets.js';
 
-const datasetIds = availableDatasets.map((dataset) => dataset.id);
+const viewIds = availableViews.map((view) => view.id);
 
-function TestApp({ activeTab }) {
-  const [tab, setTab] = useState(activeTab);
+function TestApp({ activeView }) {
+  const [tab, setTab] = useState(activeView);
 
   const artifact = {
-    dataset_id: tab,
-    title: `Dataset ${tab}`,
+    dataset_id: 2,
+    title: `Vista ${tab}`,
     generated_at: '2024-01-01T00:00:00Z',
     notes: `Notes for tab ${tab}`,
     charts: [],
@@ -36,22 +36,22 @@ describe('Property 7: solo la tab activa muestra su contenido', () => {
 
   it('only the active tab has aria-selected=true and the others have aria-selected=false', () => {
     fc.assert(
-      fc.property(fc.constantFrom(...datasetIds), (activeTab) => {
-        const { unmount } = render(<TestApp activeTab={activeTab} />);
+      fc.property(fc.constantFrom(...viewIds), (activeTab) => {
+        const { unmount } = render(<TestApp activeView={activeTab} />);
 
-        for (const dataset of availableDatasets) {
-          const tabButton = screen.getByRole('tab', { name: dataset.title });
+        for (const view of availableViews) {
+          const tabButton = screen.getByRole('tab', { name: view.title });
           expect(tabButton).toHaveAttribute(
             'aria-selected',
-            dataset.id === activeTab ? 'true' : 'false',
+            view.id === activeTab ? 'true' : 'false',
           );
         }
 
         expect(screen.getByTestId(`tabpanel-active-${activeTab}`)).toBeInTheDocument();
 
-        for (const dataset of availableDatasets) {
-          if (dataset.id !== activeTab) {
-            expect(screen.queryByTestId(`tabpanel-active-${dataset.id}`)).not.toBeInTheDocument();
+        for (const view of availableViews) {
+          if (view.id !== activeTab) {
+            expect(screen.queryByTestId(`tabpanel-active-${view.id}`)).not.toBeInTheDocument();
           }
         }
 

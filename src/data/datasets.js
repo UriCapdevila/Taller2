@@ -5,3 +5,14 @@ export const availableDatasets = [
   }
 ];
 
+export const availableViews = [
+  {
+    id: 'dataset',
+    title: 'NTR Arogya Seva (Dataset 2)',
+  },
+  {
+    id: 'model',
+    title: 'Modelo predictivo',
+  },
+];
+

@@ -1,25 +1,25 @@
-import { availableDatasets } from '../data/datasets.js';
+import { availableViews } from '../data/datasets.js';
 import { repairMojibake } from '../utils/text.js';
 
-function getNextDatasetId(currentId, key) {
-  const currentIndex = availableDatasets.findIndex((dataset) => dataset.id === currentId);
+function getNextViewId(currentId, key) {
+  const currentIndex = availableViews.findIndex((view) => view.id === currentId);
   const fallbackIndex = currentIndex === -1 ? 0 : currentIndex;
 
   if (key === 'Home') {
-    return availableDatasets[0]?.id;
+    return availableViews[0]?.id;
   }
 
   if (key === 'End') {
-    return availableDatasets.at(-1)?.id;
+    return availableViews.at(-1)?.id;
   }
 
   if (key === 'ArrowRight') {
-    return availableDatasets[(fallbackIndex + 1) % availableDatasets.length]?.id;
+    return availableViews[(fallbackIndex + 1) % availableViews.length]?.id;
   }
 
   if (key === 'ArrowLeft') {
-    return availableDatasets[
-      (fallbackIndex - 1 + availableDatasets.length) % availableDatasets.length
+    return availableViews[
+      (fallbackIndex - 1 + availableViews.length) % availableViews.length
     ]?.id;
   }
 
@@ -28,33 +28,33 @@ function getNextDatasetId(currentId, key) {
 
 export default function TabBar({ activeTab, onTabChange }) {
   const handleKeyDown = (event) => {
-    const nextDatasetId = getNextDatasetId(activeTab, event.key);
+    const nextViewId = getNextViewId(activeTab, event.key);
 
-    if (nextDatasetId === undefined) {
+    if (nextViewId === undefined) {
       return;
     }
 
     event.preventDefault();
-    onTabChange(nextDatasetId);
+    onTabChange(nextViewId);
   };
 
   return (
-    <nav className="tab-bar" role="tablist" aria-label="Datasets" onKeyDown={handleKeyDown}>
-      {availableDatasets.map((dataset) => {
-        const isActive = dataset.id === activeTab;
-        const title = repairMojibake(dataset.title);
+    <nav className="tab-bar" role="tablist" aria-label="Contenido" onKeyDown={handleKeyDown}>
+      {availableViews.map((view) => {
+        const isActive = view.id === activeTab;
+        const title = repairMojibake(view.title);
 
         return (
           <button
-            id={`tab-${dataset.id}`}
+            id={`tab-${view.id}`}
             className="tab-button"
-            key={dataset.id}
+            key={view.id}
             type="button"
             role="tab"
-            aria-controls={`panel-${dataset.id}`}
+            aria-controls={`panel-${view.id}`}
             aria-selected={isActive}
             tabIndex={isActive ? 0 : -1}
-            onClick={() => onTabChange(dataset.id)}
+            onClick={() => onTabChange(view.id)}
           >
             {title}
           </button>

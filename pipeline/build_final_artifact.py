@@ -4,6 +4,7 @@ import io
 import json
 import os
 import re
+import warnings
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -100,10 +101,50 @@ def extract_intro_and_conclusion(blocks):
         if marker in block["text"]:
             before, after = block["text"].split(marker, 1)
             block["text"] = before.strip()
-            conclusion = f"## Conclusiones\n\n{after.strip()}"
+            analysis_only = after.split("# PARTE 3 - MODELO PREDICTIVO", 1)[0].strip()
+            conclusion = f"## Conclusiones\n\n{analysis_only}"
             break
 
     return intro, conclusion
+
+
+def split_conclusion_sections(conclusion: str):
+    sections = []
+    current_title = "Conclusiones"
+    current_lines = []
+
+    def flush_section():
+        body = "\n".join(current_lines).strip()
+        if body:
+            sections.append(
+                {
+                    "id": f"conclusion_{len(sections) + 1:02d}",
+                    "title": current_title.strip().rstrip("."),
+                    "body": body,
+                }
+            )
+
+    for raw_line in conclusion.splitlines():
+        line = raw_line.strip()
+        heading = re.match(r"^##\s+(.+)$", line)
+        bold_heading = re.match(r"^\*\*(.+?)\.\*\*\s*(.*)$", line)
+
+        if heading:
+            flush_section()
+            current_title = heading.group(1)
+            current_lines = []
+            continue
+
+        if bold_heading:
+            flush_section()
+            current_title = bold_heading.group(1)
+            current_lines = [bold_heading.group(2)] if bold_heading.group(2) else []
+            continue
+
+        current_lines.append(raw_line)
+
+    flush_section()
+    return sections
 
 
 def chart_descriptions_by_order(source: str, blocks):
@@ -189,7 +230,10 @@ def build_artifact(notebook_source: Path, csv_path: Path, output_path: Path):
     original_show = plt.show
     plt.show = noop_show
     try:
-        exec(compile(source, str(notebook_source), "exec"), namespace)
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", message="Passing `palette` without assigning `hue`.*")
+            warnings.filterwarnings("ignore", message="More than 20 figures have been opened.*")
+            exec(compile(source, str(notebook_source), "exec"), namespace)
     finally:
         plt.show = original_show
 
@@ -216,6 +260,7 @@ def build_artifact(notebook_source: Path, csv_path: Path, output_path: Path):
         "intro": intro,
         "notes": "An\u00e1lisis de pacientes que recibieron cirug\u00edas/procedimientos m\u00e9dicos cubiertos por el seguro p\u00fablico de India.",
         "conclusion": conclusion,
+        "conclusion_sections": split_conclusion_sections(conclusion),
         "charts": charts,
     }
 
@@ -226,7 +271,7 @@ def build_artifact(notebook_source: Path, csv_path: Path, output_path: Path):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--source", default=r"C:\Users\Uri_C\Downloads\tp_final_taller_ii.py")
+    parser.add_argument("--source", default=str(Path(__file__).with_name("ntrarogyaseva_base_taller_.py")))
     parser.add_argument("--csv", default=str(Path(__file__).with_name("ntrarogyaseva.csv")))
     parser.add_argument(
         "--output",

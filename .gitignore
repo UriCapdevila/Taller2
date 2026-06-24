@@ -9,3 +9,6 @@ dist/
 
 # Large data files
 pipeline/*.csv
+pipeline/models/
+pipeline/.matplotlib-cache/
+__pycache__/

@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:data": "python pipeline/ntrarogyaseva_base_taller_.py",
+    "build:data": ".venv\\Scripts\\python.exe pipeline/build_final_artifact.py",
+    "build:model": ".venv\\Scripts\\python.exe pipeline/train_mortality_models.py",
     "dev": "vite",
     "dev:vite": "vite",
     "build": "vite build",
