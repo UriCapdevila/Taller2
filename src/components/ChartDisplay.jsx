@@ -16,23 +16,77 @@ function cleanChartTitle(value) {
   return repairMojibake(value).replace(/^Gr\u00e1fico\s+\d+\s*:\s*/i, '');
 }
 
+const MAX_LEAD_WORDS = 20;
+const MAX_LEAD_CHARS = 120;
+const MIN_SENTENCE_SPLIT_CHARS = 70;
+
+function wordCount(value) {
+  return value.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function isLeadTooLong(value) {
+  return wordCount(value) > MAX_LEAD_WORDS || value.length > MAX_LEAD_CHARS;
+}
+
+function splitFirstSentence(value) {
+  const match = /[.!?]\s+/.exec(value);
+
+  if (!match) {
+    return null;
+  }
+
+  return {
+    lead: value.slice(0, match.index + 1).trim(),
+    detail: value.slice(match.index + match[0].length).trim(),
+  };
+}
+
+function composeInsight(leadCandidate, detailCandidate = '') {
+  const lead = leadCandidate.trim();
+  const detail = detailCandidate.trim();
+
+  if (!lead || !isLeadTooLong(lead)) {
+    return { lead, detail };
+  }
+
+  const firstSentence = splitFirstSentence(lead);
+
+  if (firstSentence && !isLeadTooLong(firstSentence.lead)) {
+    return {
+      lead: firstSentence.lead,
+      detail: [firstSentence.detail, detail].filter(Boolean).join('\n\n'),
+    };
+  }
+
+  return {
+    lead: '',
+    detail: [lead, detail].filter(Boolean).join('\n\n'),
+  };
+}
+
 function splitInsight(value) {
   const text = value.trim();
+  const paragraphs = text.split(/\n{2,}/).map((part) => part.trim()).filter(Boolean);
+
+  if (paragraphs.length > 1) {
+    return composeInsight(paragraphs[0], paragraphs.slice(1).join('\n\n'));
+  }
+
   const sentenceEnd = /\.\s+/g;
   let match = sentenceEnd.exec(text);
 
-  while (match && match.index < 70) {
+  while (match && match.index < MIN_SENTENCE_SPLIT_CHARS) {
     match = sentenceEnd.exec(text);
   }
 
   if (!match) {
-    return { lead: text, detail: '' };
+    return composeInsight(text);
   }
 
-  return {
-    lead: text.slice(0, match.index + 1),
-    detail: text.slice(match.index + match[0].length),
-  };
+  return composeInsight(
+    text.slice(0, match.index + 1),
+    text.slice(match.index + match[0].length),
+  );
 }
 
 export default function ChartDisplay(props) {

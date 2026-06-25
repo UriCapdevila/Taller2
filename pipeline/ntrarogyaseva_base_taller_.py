@@ -8,11 +8,11 @@ Original file is located at
 
 # Dataset
 
-Comenzamos analizando la población general del dataset NTR Aarogyaseva para
+Analizamos la población general del dataset para
 comprender la estructura demográfica del conjunto de casi 480.000 registros
 de pacientes cubiertos por el programa de salud pública.
 
-El trabajo muestra quién accede a un sistema de salud pública en India, cómo son esas personas y, fundamentalmente, si la casta social de origen genera diferencias reales en los resultados de salud.
+El trabajo muestra quién accede a un sistema de salud pública en India, cómo son esas personas y si la casta social de origen genera diferencias reales en los resultados de salud.
 """
 
 # Importamos las librerías
@@ -344,9 +344,9 @@ plt.show()
 print("Edad promedio por casta:")
 print(df.groupby("CASTE_NAME")["AGE"].mean().round(1).sort_values(ascending=False))
 
-"""OC es la casta más vieja con un promedio de 48,2 años, y ST la más joven 38,9. BC tiene 34,2.
+"""OC es la casta más vieja (49,2 años), ST la más joven (38,9) y BC queda en 44,2.
 
-Al mirar la edad promedio por casta, aparece un patrón muy ordenado: OC es la más vieja con 48,2 años de promedio, y ST la más joven con 36,7. BC está en 43,2. Esta diferencia de 5 años entre BC y OC es importante porque la edad por sí sola influye en el riesgo de morir. Por eso, cuando más adelante comparemos mortalidad, vamos a tener que ajustar por edad para que la comparación sea justa.
+Al mirar la edad promedio por casta, aparece un patrón muy ordenado: OC es la más vieja con 49,2 años de promedio, y ST la más joven con 38,9. BC está en 44,2. Esta diferencia de 5 años entre BC y OC es importante porque la edad por sí sola influye en el riesgo de morir. Por eso, cuando más adelante comparemos mortalidad, vamos a tener que ajustar por edad para que la comparación sea justa.
 """
 
 # Gráfico 11: Mortalidad por Casta + tamaño de población
@@ -549,7 +549,7 @@ ax.legend(title="Sexo")
 plt.tight_layout()
 plt.show()
 
-"""Las niñas que acceden al sistema son sistemáticamente más pequeñas que los niños: BC 3,19 vs 3,53 años; OC 3,09 vs 3,92 años.
+"""Las niñas llegan más pequeñas que los niños: BC 3,19 vs 3,53; OC 3,09 vs 3,92 años.
 
 Entre los niños que sí son atendidos, las niñas llegan al sistema siendo más pequeñas que los niños: en OC, la diferencia es de casi un año entero. Eso es compatible con pensar que las familias llevan a las niñas solo cuando el cuadro es urgente y no puede esperar. A los niños los llevan también por motivos más leves, a lo largo de un rango de edad más amplio.
 """
@@ -653,7 +653,7 @@ ax.set_ylim(0, comparacion.values.max() * 1.18)
 plt.tight_layout()
 plt.show()
 
-"""Mortalidad cruda BC 3,14% / OC 2,95%. Ajustada por edad: BC 3,04% / OC 2,69%. La brecha casi se duplica al ajustar.
+"""Mortalidad cruda BC 3,14% / OC 2,95%. Ajustada por edad: BC 3,04% / OC 2,69%.
 
 Como BC es más joven que OC, comparar las mortalidades crudas no es del todo justo: los pacientes de BC deberían morir menos solo por ser más jóvenes. Para resolver eso, estandarizamos las tasas: calculamos cuánto moriría cada casta si tuviera la misma distribución de edades que la población total. El resultado es claro: al ajustar, la mortalidad de OC baja más que la de BC, y la brecha entre ambas casi se duplica. La comparación cruda estaba subestimando la verdadera desventaja de BC.
 """
@@ -722,7 +722,7 @@ plt.suptitle("Gráfico 21: Top 10 Cirugías más Frecuentes - BC vs OC", fontsiz
 plt.tight_layout()
 plt.show()
 
-"""En ambas castas: primer procedimiento hemodiálisis (18,6% BC vs 24,6% OC), segundo cirugía de fracturas (~9%). Perfil muy parecido.
+"""En ambas castas: primer procedimiento hemodiálisis (18,6% BC vs 24,6% OC), segundo cirugía de fracturas (~9%).
 
 A pesar de la diferencia en Nefrología que vimos recién, cuando bajamos al nivel del procedimiento puntual, BC y OC son casi idénticos: la hemodiálisis de mantenimiento primero, la cirugía de fracturas segundo. El tipo de procedimiento no explica las diferencias de resultado.
 """
@@ -866,9 +866,9 @@ ax.legend(title="Casta")
 plt.tight_layout()
 plt.show()
 
-"""Diferencia significativa SOLO en Nefrología (BC 4,27% vs OC 3,74%, p=0,0014). En las otras 5 especialidades: diferencias mínimas o nulas.
+"""Diferencia significativa SOLO en Nefrología. En las otras 5 especialidades: diferencias mínimas o nulas.
 
-Este es el gráfico más importante: al cruzar mortalidad por especialidad, la diferencia entre BC y OC prácticamente desaparece en cinco de las seis especialidades. Pero en Nefrología, la diferencia es de más de medio punto. Que la brecha se concentre justamente en Nefrología, la especialidad de la hemodiálisis crónica, sugiere que hay algo específico del tratamiento renal que perjudica más a los pacientes BC, tal vez acceso tardío al tratamiento o calidad diferencial de las unidades de diálisis.
+Al cruzar mortalidad por especialidad, la diferencia entre BC y OC prácticamente desaparece en cinco de las seis especialidades. Pero en Nefrología, la diferencia es de más de medio punto. Que la brecha se concentre justamente en Nefrología, la especialidad de la hemodiálisis crónica, sugiere que hay algo específico del tratamiento renal que perjudica más a los pacientes BC, tal vez acceso tardío al tratamiento o calidad diferencial de las unidades de diálisis.
 
 # CONCLUSIONES
 

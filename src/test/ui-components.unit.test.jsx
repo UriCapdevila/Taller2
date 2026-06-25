@@ -121,6 +121,76 @@ describe('ChartDisplay', () => {
 
     expect(screen.getByRole('heading')).toHaveClass('story-title--compact');
   });
+
+  it('keeps the narrative paragraph in the smaller detail text', () => {
+    const { container } = render(
+      <ChartDisplay
+        chart={{
+          id: 'gender-gap',
+          title: 'Raz\u00f3n de g\u00e9nero por grupo etario - poblaci\u00f3n general',
+          type: 'image/png',
+          data: 'abc123',
+          description: [
+            'Mujeres por cada hombre en cada franja etaria de la poblaci\u00f3n total.',
+            'La brecha de g\u00e9nero no es pareja en todas las edades: en adultos j\u00f3venes hay solo 0,47 mujeres por cada hombre, probablemente por el efecto del politrauma.',
+          ].join('\n\n'),
+        }}
+      />,
+    );
+
+    expect(container.querySelector('.story-lead')).toHaveTextContent(
+      'Mujeres por cada hombre en cada franja etaria de la poblaci\u00f3n total.',
+    );
+    expect(container.querySelector('.story-detail')).toHaveTextContent(
+      'La brecha de g\u00e9nero no es pareja en todas las edades',
+    );
+  });
+
+  it('splits an overloaded multi-sentence lead into lead and detail', () => {
+    const { container } = render(
+      <ChartDisplay
+        chart={{
+          id: 'forest-plot',
+          title: 'Forest plot: diferencia de mortalidad por grupo de edad - BC vs OC',
+          type: 'image/png',
+          data: 'abc123',
+          description: [
+            'Intervalos de confianza del 95% de la diferencia BC-OC en mortalidad por franja etaria. Significativo en 18-34 y 35-49. No significativo en 65+.',
+            'Este gr\u00e1fico traduce el anterior a t\u00e9rminos estad\u00edsticos.',
+          ].join('\n\n'),
+        }}
+      />,
+    );
+
+    expect(container.querySelector('.story-lead')).toHaveTextContent(
+      'Intervalos de confianza del 95% de la diferencia BC-OC en mortalidad por franja etaria.',
+    );
+    expect(container.querySelector('.story-detail')).toHaveTextContent(
+      'Significativo en 18-34 y 35-49.',
+    );
+  });
+
+  it('moves a long single-sentence lead into the smaller detail text', () => {
+    const { container } = render(
+      <ChartDisplay
+        chart={{
+          id: 'girls-age',
+          title: 'Edad promedio al ingreso al sistema - ni\u00f1as vs ni\u00f1os',
+          type: 'image/png',
+          data: 'abc123',
+          description: [
+            'Las ni\u00f1as que acceden al sistema son sistem\u00e1ticamente m\u00e1s peque\u00f1as que los ni\u00f1os: BC 3,19 vs 3,53 a\u00f1os; OC 3,09 vs 3,92 a\u00f1os.',
+            'Entre los ni\u00f1os que s\u00ed son atendidos, las ni\u00f1as llegan al sistema siendo m\u00e1s peque\u00f1as.',
+          ].join('\n\n'),
+        }}
+      />,
+    );
+
+    expect(container.querySelector('.story-lead')).toBeNull();
+    expect(container.querySelector('.story-detail')).toHaveTextContent(
+      'Las ni\u00f1as que acceden al sistema son sistem\u00e1ticamente m\u00e1s peque\u00f1as',
+    );
+  });
 });
 
 describe('NotesDisplay', () => {
