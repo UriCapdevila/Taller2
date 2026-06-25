@@ -8,7 +8,7 @@ export const availableDatasets = [
 export const availableViews = [
   {
     id: 'dataset',
-    title: 'NTR Arogya Seva (Dataset 2)',
+    title: 'Visualizaciones del dataset',
   },
   {
     id: 'model',
