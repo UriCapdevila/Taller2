@@ -112,9 +112,9 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
-"""Distribución de edades de los ~480k pacientes con líneas de media (43,8) y mediana (46).
+"""Distribución de edades de los ~480k pacientes con líneas de media (44,9) y mediana (47).
 
-El programa atiende principalmente a adultos entre 35 y 65 años. La mediana es 46 años, y hay un pequeño pico en la infancia que vamos a retomar más adelante cuando hablemos de acceso por género.
+El programa atiende principalmente a adultos entre 35 y 65 años. La mediana es 47 años, y hay un pequeño pico en la infancia que vamos a retomar más adelante cuando hablemos de acceso por género.
 """
 
 #Gráfico 2: Distribución de Edad por Grupos
@@ -173,7 +173,7 @@ plt.show()
 
 """Proporción de Male, Female, Male (Child), Female (Child) en el total.
 
-Acá aparece el primer dato fuerte: hay 55% hombres vs 34% mujeres, y esa misma brecha que se repite en los niños. Esto puede deberse en parte a que ciertas enfermedades del programa son más comunes en varones, pero también puede haber barreras de acceso para mujeres y niñas.
+Acá aparece el primer dato fuerte: hay 54,4% hombres adultos y 37,3% mujeres adultas. En la infancia también hay brecha: 5,2% son niños y 3,1% niñas. Esto puede deberse en parte a que ciertas enfermedades del programa son más comunes en varones, pero también puede haber barreras de acceso para mujeres y niñas.
 """
 
 # Gráfico 4: Razón de género por grupo etario
@@ -204,7 +204,7 @@ plt.show()
 
 """Mujeres por cada hombre en cada franja etaria de la población total.
 
-La brecha de género no es pareja en todas las edades: en adultos jóvenes hay solo 0,47 mujeres por cada hombre, probablemente por el efecto del politrauma. Pero lo más llamativo es la niñez: 0,59 niñas por cada niño.
+La brecha de género no es pareja en todas las edades: en adultos jóvenes hay solo 0,47 mujeres por cada hombre, probablemente por el efecto del politrauma. Pero lo más llamativo es la niñez: 0,54 niñas por cada niño.
 """
 
 # Gráfico 5: Especialidad por Grupo de edad
@@ -265,9 +265,9 @@ ax.set_ylabel("Cantidad de casos")
 ax.set_ylim(0, valores_hosp.max() * 1.18)
 plt.tight_layout()
 
-"""65,1% privado vs 34,9% público.
+"""77,0% privado vs 23,0% público.
 
-El 65% de los procedimientos se hace en hospitales privados, aunque el programa está financiado por el Estado. Este dato es importante porque más adelante vamos a ver que la mortalidad en el sector público casi duplica a la del privado, así que a qué tipo de hospital accede cada casta importa mucho
+El 77% de los procedimientos se hace en hospitales privados, aunque el programa está financiado por el Estado. Este dato es importante porque más adelante vamos a ver que la mortalidad en el sector público casi duplica a la del privado, así que a qué tipo de hospital accede cada casta importa mucho
 """
 
 # Gráfico 8: Mortalidad General
@@ -292,9 +292,9 @@ ax.set_ylim(0, valores_mort.max() * 1.18)
 plt.tight_layout()
 plt.show()
 
-"""3,15% de mortalidad general sobre ~480k pacientes.
+"""2,11% de mortalidad general sobre ~480k pacientes.
 
-La mortalidad general del programa es del 3,15%. Este número es nuestra línea de base: cuando más adelante hablemos de que castas tiene tal o cual porcentaje, siempre va a ser en relación a este dato.
+La mortalidad general del programa es del 2,11%. Este número es nuestra línea de base: cuando más adelante hablemos de que castas tiene tal o cual porcentaje, siempre va a ser en relación a este dato.
 """
 
 # Gráfico 9: Castas
@@ -319,7 +319,7 @@ ax.set_xlim(0, datos.max() * 1.22)
 plt.tight_layout()
 plt.show()
 
-"""BC: 50,6%, OC: 23,4%, SC: 16,7%, Minorias: 6,2%, ST: 3%.
+"""BC: 51,3%, OC: 23,8%, SC: 16,0%, Minorías: 6,1%, ST: 2,7% y Others: 0,1%.
 
 BC concentra poco más de la mitad del dataset y OC casi el 24%. Entre los dos suman el 75% del total, lo que los hace estadísticamente los grupos más robustos para comparar. También noto que ST, la casta indígena más postergada, es apenas el 3% a pesar de tener necesidades de salud importantes, lo que ya sugiere una barrera de acceso.
 """
@@ -424,7 +424,7 @@ for p in ax.patches:
 plt.tight_layout()
 plt.show()
 
-"""BC tiene 61,0% varones, OC 62,6%. Composición casi idéntica.
+"""BC tiene 58,6% varones, OC 60,4%. Composición casi idéntica.
 
 Este gráfico es el que valida metodológicamente la comparación BC vs OC: ambas castas tienen una composición de género prácticamente idéntica. Si encontramos diferencias de mortalidad entre ellas, no vamos a poder decir que son por el sexo.
 """
@@ -460,9 +460,9 @@ for p in ax.patches:
 plt.tight_layout()
 plt.show()
 
-"""OC accede al privado en 73,1%, BC en 63,7, ST en 53,9%.
+"""OC accede al privado en 82,7%, BC en 75,8%, ST en 69,1%.
 
-OC accede al sector privado casi 10 puntos más que BC. Y como ya vimos que la mortalidad en el sector privado es mucho menor, esto empieza a sugerir que parte de cualquier diferencia de mortalidad que veamos entre castas podría estar mediada por a qué tipo de hospital accede cada una
+OC accede al sector privado 6,9 puntos más que BC. Y como ya vimos que la mortalidad en el sector privado es mucho menor, esto empieza a sugerir que parte de cualquier diferencia de mortalidad que veamos entre castas podría estar mediada por a qué tipo de hospital accede cada una
 """
 
 # Subconjunto de trabajo: solo BC y OC, adultos (Male/Female)
@@ -549,7 +549,7 @@ ax.legend(title="Sexo")
 plt.tight_layout()
 plt.show()
 
-"""Las niñas llegan más pequeñas que los niños: BC 3,19 vs 3,53; OC 3,09 vs 3,92 años.
+"""Las niñas llegan más pequeñas que los niños: BC 3,62 vs 4,15; OC 3,80 vs 4,95 años.
 
 Entre los niños que sí son atendidos, las niñas llegan al sistema siendo más pequeñas que los niños: en OC, la diferencia es de casi un año entero. Eso es compatible con pensar que las familias llevan a las niñas solo cuando el cuadro es urgente y no puede esperar. A los niños los llevan también por motivos más leves, a lo largo de un rango de edad más amplio.
 """
@@ -618,9 +618,9 @@ ax.set_title("Gráfico 18: Forest plot: diferencia de mortalidad por grupo de ed
 plt.tight_layout()
 plt.show()
 
-"""Intervalos de confianza del 95% de la diferencia BC−OC en mortalidad por franja etaria. Significativo en 18–34 y 35–49. No significativo en 65+.
+"""Intervalos de confianza del 95% de la diferencia BC−OC en mortalidad por franja etaria. Significativo de 0–17 a 50–64. No significativo en 65+.
 
-Este gráfico traduce el anterior a términos estadísticos. Cada punto es la diferencia de mortalidad BC menos OC, y las líneas horizontales son el intervalo de confianza. Cuando ese intervalo no toca la línea del cero, la diferencia es estadísticamente significativa. Eso pasa claramente en adultos de 18 a 49 años. En la niñez el intervalo roza el cero, así que la evidencia es más débil. Y en mayores de 65, el intervalo cruza ampliamente el cero: ahí no podemos afirmar que hay diferencia real.
+Este gráfico traduce el anterior a términos estadísticos. Cada punto es la diferencia de mortalidad BC menos OC, y las líneas horizontales son el intervalo de confianza. Cuando ese intervalo no toca la línea del cero, la diferencia es estadísticamente significativa. Eso ocurre desde la niñez hasta los 64 años, aunque en 50–64 el margen es muy ajustado. En mayores de 65, el intervalo cruza ampliamente el cero: ahí no podemos afirmar que hay diferencia real.
 """
 
 pop_estandar = df["GRUPO_EDAD"].value_counts(normalize=True)
@@ -653,7 +653,7 @@ ax.set_ylim(0, comparacion.values.max() * 1.18)
 plt.tight_layout()
 plt.show()
 
-"""Mortalidad cruda BC 3,14% / OC 2,95%. Ajustada por edad: BC 3,04% / OC 2,69%.
+"""Mortalidad cruda BC 2,08% / OC 1,99%. Ajustada por edad: BC 1,99% / OC 1,80%.
 
 Como BC es más joven que OC, comparar las mortalidades crudas no es del todo justo: los pacientes de BC deberían morir menos solo por ser más jóvenes. Para resolver eso, estandarizamos las tasas: calculamos cuánto moriría cada casta si tuviera la misma distribución de edades que la población total. El resultado es claro: al ajustar, la mortalidad de OC baja más que la de BC, y la brecha entre ambas casi se duplica. La comparación cruda estaba subestimando la verdadera desventaja de BC.
 """
@@ -692,7 +692,7 @@ ax.legend(title="Casta")
 plt.tight_layout()
 plt.show()
 
-"""OC usa Nefrología proporcionalmente más que BC (33,8% vs 28,7%). El resto de especialidades es similar.
+"""OC usa Nefrología proporcionalmente más que BC (23,6% vs 20,4%). El resto de especialidades es similar.
 
 El perfil de especialidades es bastante similar entre BC y OC, con una excepción: OC usa Nefrología proporcionalmente más. Ese dato es importante para interpretar el siguiente gráfico: si OC tiene más pacientes renales y aun así BC tiene mayor mortalidad en esa especialidad, la brecha no se puede explicar por el volumen de casos.
 """
@@ -722,7 +722,7 @@ plt.suptitle("Gráfico 21: Top 10 Cirugías más Frecuentes - BC vs OC", fontsiz
 plt.tight_layout()
 plt.show()
 
-"""En ambas castas: primer procedimiento hemodiálisis (18,6% BC vs 24,6% OC), segundo cirugía de fracturas (~9%).
+"""En ambas castas: primer procedimiento hemodiálisis (13,6% BC vs 17,4% OC), segundo cirugía de fracturas (11,3% BC vs 12,2% OC).
 
 A pesar de la diferencia en Nefrología que vimos recién, cuando bajamos al nivel del procedimiento puntual, BC y OC son casi idénticos: la hemodiálisis de mantenimiento primero, la cirugía de fracturas segundo. El tipo de procedimiento no explica las diferencias de resultado.
 """
@@ -799,9 +799,9 @@ ax.legend(title="Casta")
 plt.tight_layout()
 plt.show()
 
-"""La composición de castas varía dramáticamente por distrito: de 92,9% BC en Srikakulam a 51/48% en Guntur.
+"""La composición de castas varía dramáticamente por distrito: de 93,9% BC en Srikakulam a 51,3% BC / 48,7% OC en Guntur.
 
-Este gráfico es una advertencia metodológica: la composición de castas varía enormemente por zona. Donde hay 92,9% de BC es porque OC directamente no vive ahí. Si la calidad de los hospitales también varía por zona, parte de lo que atribuimos a la casta podría ser un efecto geográfico disfrazado.
+Este gráfico es una advertencia metodológica: la composición de castas varía enormemente por zona. Donde hay 93,9% de BC es porque OC directamente casi no aparece en ese distrito. Si la calidad de los hospitales también varía por zona, parte de lo que atribuimos a la casta podría ser un efecto geográfico disfrazado.
 """
 
 # Gráfico 24: Razón niñas/niños por distrito (top 10)
@@ -824,7 +824,7 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 
-"""La razón niñas/niños varía de 0,57 (Vishakhapatnam) a 0,72 (West Godavari): diferencia de 0,15 puntos.
+"""La razón niñas/niños varía de 0,54 (Krishna) a 0,71 (West Godavari): diferencia de 0,17 puntos.
 
 Aquí la variación geográfica en la brecha de género es mucho mayor que la variación entre castas: 0,17 puntos de diferencia entre distritos, contra solo 0,03 entre BC y OC. El lugar donde vive una familia parece pesar más que su casta a la hora de definir si las niñas acceden al sistema.
 """
@@ -868,7 +868,7 @@ plt.show()
 
 """Diferencia significativa SOLO en Nefrología. En las otras 5 especialidades: diferencias mínimas o nulas.
 
-Al cruzar mortalidad por especialidad, la diferencia entre BC y OC prácticamente desaparece en cinco de las seis especialidades. Pero en Nefrología, la diferencia es de más de medio punto. Que la brecha se concentre justamente en Nefrología, la especialidad de la hemodiálisis crónica, sugiere que hay algo específico del tratamiento renal que perjudica más a los pacientes BC, tal vez acceso tardío al tratamiento o calidad diferencial de las unidades de diálisis.
+Al cruzar mortalidad por especialidad, la diferencia entre BC y OC prácticamente desaparece en cinco de las seis especialidades. Pero en Nefrología, BC registra 4,07% frente a 3,54% en OC, una diferencia de 0,53 puntos. Que la brecha se concentre justamente en Nefrología, la especialidad de la hemodiálisis crónica, sugiere que hay algo específico del tratamiento renal que perjudica más a los pacientes BC, tal vez acceso tardío al tratamiento o calidad diferencial de las unidades de diálisis.
 
 # CONCLUSIONES
 
